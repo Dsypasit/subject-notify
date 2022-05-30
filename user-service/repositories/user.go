@@ -23,10 +23,11 @@ type UpdateUserPassword struct {
 
 type UserRepository interface {
 	Create(User) error
-	UpdateInformatin(UpdateUserInformation) error
+	UpdateInformation(UpdateUserInformation) error
 	UpdatePassword(UpdateUserPassword) error
 	GetUsers() ([]User, error)
 	GetUserByUsername(username string) (User, error)
+	Delete(username string) error
 }
 
 type userRepositoryDB struct {
@@ -42,7 +43,7 @@ func (r userRepositoryDB) Create(user User) error {
 	return r.db.Create(&user).Error
 }
 
-func (r userRepositoryDB) UpdateInformatin(userUpdate UpdateUserInformation) error {
+func (r userRepositoryDB) UpdateInformation(userUpdate UpdateUserInformation) error {
 	return r.db.Model(&User{}).Where("username=?", userUpdate.Username).Updates(User{
 		Email:  userUpdate.Email,
 		LineID: userUpdate.LineID,
@@ -63,4 +64,8 @@ func (r userRepositoryDB) GetUsers() (users []User, err error) {
 func (r userRepositoryDB) GetUserByUsername(username string) (user User, err error) {
 	err = r.db.Where("username=?", username).First(&user).Error
 	return user, err
+}
+
+func (r userRepositoryDB) Delete(username string) error {
+	return r.db.Where("username=?", username).Delete(&User{}).Error
 }
