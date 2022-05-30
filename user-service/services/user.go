@@ -1,4 +1,4 @@
-package service
+package services
 
 import (
 	"user-service/errs"
@@ -12,8 +12,19 @@ type NewUser struct {
 	LineID   string
 }
 
+type UpdateUserInfo struct {
+	Username string
+	Email    string
+	LineID   string
+}
+
+type UpdateUserPassword struct {
+	Username string
+	Password string
+}
+
 type UserResponse struct {
-	Username string `gorm:"unique"`
+	Username string
 	Email    string
 	LineID   string
 }
@@ -22,8 +33,8 @@ type UserService interface {
 	CreateAccount(user NewUser) (*UserResponse, error)
 	GetUser(username string) (*UserResponse, error)
 	DeleteAccount(username string) error
-	UpdateInformation()
-	UpdatePassword()
+	UpdateInformation(UpdateUserInfo) error
+	UpdatePassword(UpdateUserPassword) error
 }
 
 type userService struct {
@@ -82,7 +93,41 @@ func (s userService) GetUser(username string) (*UserResponse, error) {
 }
 
 func (s userService) DeleteAccount(username string) (err error) {
+	if username == "" {
+		return errs.InvalidRequest
+	}
 	err = s.userRepo.Delete(username)
+	if err != nil {
+		return errs.ServerError
+	}
+	return nil
+}
+
+func (s userService) UpdateInformation(userUpdate UpdateUserInfo) error {
+	if userUpdate.Username == "" {
+		return errs.InvalidRequest
+	}
+	userUpdateRepo := repositories.UpdateUserInformation{
+		Username: userUpdate.Username,
+		Email:    userUpdate.Email,
+		LineID:   userUpdate.LineID,
+	}
+	err := s.userRepo.UpdateInformation(userUpdateRepo)
+	if err != nil {
+		return errs.ServerError
+	}
+	return nil
+}
+
+func (s userService) UpdatePassword(userUpdate UpdateUserPassword) error {
+	if userUpdate.Username == "" {
+		return errs.InvalidRequest
+	}
+	userUpdateRepo := repositories.UpdateUserPassword{
+		Username: userUpdate.Username,
+		Password: userUpdate.Password,
+	}
+	err := s.userRepo.UpdatePassword(userUpdateRepo)
 	if err != nil {
 		return errs.ServerError
 	}
