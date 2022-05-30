@@ -1,0 +1,9 @@
+version: '3.9'
+services:
+  mariadb:
+    image: mariadb
+    ports:
+      - 4306:3306
+    environment:
+      - MARIADB_ROOT_PASSWORD=1234
+      - MARIADB_DATABASE=users
