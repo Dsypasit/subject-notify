@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "user-service"
+		},
+		{
+			"path": "subject-service"
 		}
 	],
 	"settings": {}
