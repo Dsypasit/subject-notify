@@ -67,8 +67,9 @@ func (h subjectHandler) UpdateSubject(c *fiber.Ctx) error {
 
 func (h subjectHandler) GetSubjectsByUsername(c *fiber.Ctx) error {
 	reqSub := repositories.SubjectQuery{}
-	if err := c.BodyParser(&reqSub); err != nil {
-		return errs.ServerError
+	reqSub.Username = c.Params("username")
+	if reqSub.Username == "" {
+		return errs.InvalidRequest
 	}
 	subjects, err := h.subjectSrv.GetSubjectsByUsername(reqSub)
 	if err != nil {
@@ -79,10 +80,13 @@ func (h subjectHandler) GetSubjectsByUsername(c *fiber.Ctx) error {
 }
 
 func (h subjectHandler) GetSubjectsByQuery(c *fiber.Ctx) error {
-	reqSub := repositories.SubjectQuery{}
-	if err := c.BodyParser(&reqSub); err != nil {
-		return errs.ServerError
+	reqSub := repositories.SubjectQuery{
+		Username:    c.Query("username"),
+		SubjectName: c.Query("subject_name"),
+		Time:        c.Query("time"),
+		Day:         c.Query("day"),
 	}
+
 	subjects, err := h.subjectSrv.GetSubjectsByQuery(reqSub)
 	if err != nil {
 		return err

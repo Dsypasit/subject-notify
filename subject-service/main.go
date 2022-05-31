@@ -1,9 +1,11 @@
 package main
 
 import (
-	"fmt"
+	"subject-service/api"
 	"subject-service/repositories"
+	"subject-service/services"
 
+	"github.com/gofiber/fiber/v2"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -14,27 +16,13 @@ var subject repositories.Subject
 func main() {
 	db := initialDatabase()
 	subjectRepo := repositories.NewSubjectRepository(db)
+	subjectService := services.NewSubjectService(subjectRepo)
+	subjectHandler := api.NewSubjectHandler(subjectService)
 
-	subject = repositories.Subject{
-		Username:    "Pasit",
-		SubjectName: "English",
-		Day:         "Mon",
-		Time:        "Afternoon",
-		Teacher:     "Somsak",
-		Link:        "google.com",
-		Active:      true,
-	}
+	app := fiber.New()
+	api.Route(app, subjectHandler)
+	app.Listen("127.0.0.1:800")
 
-	subQuery := repositories.SubjectQuery{
-		SubjectName: "Math",
-	}
-
-	// subjectRepo.CreateSubject(subject)
-	subs, err := subjectRepo.GetSubjectByQuery(subQuery)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("%#v", subs)
 }
 
 func initialDatabase() *gorm.DB {
