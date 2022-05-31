@@ -8,7 +8,7 @@ type Subject struct {
 	Teacher     string `json:"teacher"`
 	Day         string `json:"day"`
 	Time        string `json:"time"`
-	Active      bool   `json:"active"`
+	Active      bool   `json:"active" gorm:"defalut:true"`
 	Link        string `json:"link"`
 	Username    string `json:"username"`
 }
@@ -27,6 +27,13 @@ type SubjectUpdate struct {
 	Time        string `json:"time"`
 	Active      bool   `json:"active"`
 	Link        string `json:"link"`
+}
+
+type SubjectRepository interface {
+	CreateSubject(subject Subject) error
+	DeleteSubject(subQuery SubjectQuery) error
+	GetSubjectByQuery(subQuery SubjectQuery) (subjects []Subject, err error)
+	UpdateSubjectByQuery(subQuery SubjectQuery, subUpdate SubjectUpdate) (err error)
 }
 
 type subjectRepository struct {
