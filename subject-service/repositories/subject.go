@@ -8,14 +8,14 @@ type Subject struct {
 	Teacher     string `json:"teacher"`
 	Day         string `json:"day"`
 	Time        string `json:"time"`
-	Active      bool   `json:"active" gorm:"defalut:true"`
+	Active      bool   `json:"active" gorm:"default:true"`
 	Link        string `json:"link"`
 	Username    string `json:"username"`
 }
 
 type SubjectQuery struct {
 	Username    string `json:"username"`
-	SubjectName string `json:"subject"`
+	SubjectName string `json:"subject_name"`
 	Day         string `json:"day"`
 	Time        string `json:"time"`
 }
