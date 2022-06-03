@@ -1,0 +1,43 @@
+_format_version: "1.1"
+services:
+- connect_timeout: 60000
+  enabled: true
+  host: user_app
+  name: user_service
+  path: /
+  port: 5000
+  protocol: http
+  read_timeout: 60000
+  retries: 5
+  routes:
+  - https_redirect_status_code: 426
+    methods:
+    - POST
+    name: OpenAccount
+    path_handling: v1
+    paths:
+    - /OpenAccount
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: false
+  - https_redirect_status_code: 426
+    methods:
+    - GET
+    name: greetting
+    path_handling: v1
+    paths:
+    - /Hello
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    request_buffering: true
+    response_buffering: true
+    strip_path: false
+  write_timeout: 60000

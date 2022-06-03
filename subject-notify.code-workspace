@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "subject-service"
+		},
+		{
+			"path": "api-gateway"
 		}
 	],
 	"settings": {}
