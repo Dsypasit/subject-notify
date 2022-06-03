@@ -2,9 +2,22 @@ version: '3.9'
 services:
   mariadb:
     image: mariadb
-    container_name: subject_db
+    container_name: user_db
     ports:
       - 4307:3306
     environment:
       - MARIADB_ROOT_PASSWORD=1234
       - MARIADB_DATABASE=users
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 5
+  
+  user-service:
+    build: .
+    ports:
+      - 5001:5001
+    depends_on:
+      mariadb:
+        condition: service_healthy
+

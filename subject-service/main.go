@@ -11,8 +11,6 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var subject repositories.Subject
-
 func main() {
 	db := initialDatabase()
 	subjectRepo := repositories.NewSubjectRepository(db)
@@ -21,12 +19,12 @@ func main() {
 
 	app := fiber.New()
 	api.Route(app, subjectHandler)
-	app.Listen("127.0.0.1:800")
+	app.Listen(":5001")
 
 }
 
 func initialDatabase() *gorm.DB {
-	dsn := "root:1234@tcp(localhost:4307)/users"
+	dsn := "root:1234@tcp(mariadb:3306)/users"
 	dial := mysql.Open(dsn)
 	db, err := gorm.Open(dial, &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),

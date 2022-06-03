@@ -6,6 +6,7 @@ import (
 	"user-service/services"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -18,12 +19,15 @@ func main() {
 	userHandler := api.NewUserHandler(userService)
 
 	app := fiber.New()
+	app.Use(cors.New(cors.Config{
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
 	api.Route(app, userHandler)
-	app.Listen("127.0.0.1:8000")
+	app.Listen(":5000")
 }
 
 func initialDatabase() *gorm.DB {
-	dsn := "root:1234@tcp(localhost:4306)/users"
+	dsn := "root:1234@tcp(mariadb:3306)/users"
 	dial := mysql.Open(dsn)
 	db, err := gorm.Open(dial, &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),

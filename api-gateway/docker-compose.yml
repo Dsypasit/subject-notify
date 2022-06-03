@@ -67,5 +67,14 @@ services:
       - kong-database
     ports:
       - "1337:1337"
+    
+  kongdeck:
+    image: kong/deck
+
+networks:
+  default:
+    name: kong_net
+    external: true
+
 volumes:
   pg-data:

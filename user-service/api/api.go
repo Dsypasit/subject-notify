@@ -14,6 +14,7 @@ type UserHandler interface {
 	UpdateInformation(c *fiber.Ctx) error
 	UpdatePassword(c *fiber.Ctx) error
 	DeleteAccount(c *fiber.Ctx) error
+	Hello(c *fiber.Ctx) error
 }
 
 type userHandler struct {
@@ -85,5 +86,12 @@ func (h userHandler) DeleteAccount(c *fiber.Ctx) error {
 	}
 	return c.JSON(fiber.Map{
 		"message": fmt.Sprintf("Account %v has been deleted", username.Username),
+	})
+}
+
+func (h userHandler) Hello(c *fiber.Ctx) error {
+	return c.JSON(fiber.Map{
+		"message": "Hello world",
+		"status":  "ok",
 	})
 }
