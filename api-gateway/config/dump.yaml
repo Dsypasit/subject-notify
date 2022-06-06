@@ -1,4 +1,12 @@
 _format_version: "1.1"
+consumers:
+- acls:
+  - group: g1
+  jwt_secrets:
+  - algorithm: HS256
+    key: admin
+    secret: admin
+  username: user
 services:
 - connect_timeout: 60000
   enabled: true
@@ -32,6 +40,38 @@ services:
     path_handling: v1
     paths:
     - /Hello
+    plugins:
+    - config:
+        allow:
+        - g1
+        deny: null
+        hide_groups_header: false
+      enabled: true
+      name: acl
+      protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+    - config:
+        anonymous: null
+        claims_to_verify: null
+        cookie_names: []
+        header_names:
+        - authorization
+        key_claim_name: kid
+        maximum_expiration: 0
+        run_on_preflight: true
+        secret_is_base64: false
+        uri_param_names:
+        - jwt
+      enabled: true
+      name: jwt
+      protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
     preserve_host: false
     protocols:
     - http

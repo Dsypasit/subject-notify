@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "api-gateway"
+		},
+		{
+			"path": "frontend"
 		}
 	],
 	"settings": {}
