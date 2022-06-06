@@ -9,7 +9,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 
-export default function MenuAppBar() {
+export default function MenuAppBar({auth}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
 
@@ -37,7 +37,7 @@ export default function MenuAppBar() {
           <Typography variant="h6" component="div" className='grow'>
             Photos
           </Typography>
-          {true && (
+          {auth && (
             <div>
               <IconButton
                 size="large"
