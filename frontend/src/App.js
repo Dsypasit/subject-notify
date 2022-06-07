@@ -2,17 +2,19 @@ import MenuAppBar from "./component/navbar";
 import Login from "./login";
 import Signup from "./signup"
 import Present from "./present";
-import { useState } from "react";
+import auth from "./auth";
 import { BrowserRouter, Route, Routes, Switch } from "react-router-dom";
+import { ProtectRoute } from "./protect.route";
 
 function App() {
-  const [auth, setAuth] = useState(false)
   return (
     <div className="w-full h-full">
       <MenuAppBar auth={auth}/>
       <Routes>
-      <Route path='/' element={auth ?<Present/> :<Signup setAuth={setAuth}/>}/>
-      <Route path='/login' element={<Login setAuth={setAuth}/>}/>
+      <Route path='/signup' element={<Signup/>}/>
+      <Route exact path='/' element={<Login/>}/>
+      <Route path='/present' element={<ProtectRoute Component={Present}/>}/>
+      <Route path="*" component={() => "404 NOT FOUND"} />
       </Routes>
     </div>
   );

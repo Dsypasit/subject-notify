@@ -18,7 +18,7 @@ export default function BasicList() {
         <List>
           <ListItem >
               <ListItemAvatar>
-                  <Avatar className='bg-green-500'>
+                  <Avatar className='bg-red-500'>
                 <AccountCircle />
                   </Avatar>
               </ListItemAvatar>

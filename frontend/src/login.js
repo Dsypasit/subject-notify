@@ -1,14 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Avatar, Button, Grid, Link, Paper, TextField, Typography } from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person';
 import { FormControlLabel, Checkbox } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import auth from './auth';
 
-const Login = ({setAuth}) =>{
+const Login = () =>{
+    let err = ""
+    const [name, setName] = useState("")
+    const [password, setPassword] = useState("")
     const nevigate = useNavigate()
-    const submit = () =>{
-        setAuth(true)
-        nevigate('/')
+    const submit = async () =>{
+        console.log('before');
+        err = await auth.login(name, password)
+        nevigate('/present')
     }
     return (
         <Grid className='py-20 h-100v'>
@@ -17,8 +23,9 @@ const Login = ({setAuth}) =>{
                 <Avatar className='bg-emerald-500'><PersonIcon/></Avatar>
                 <h2>Sign in</h2>
             </Grid>
-            <TextField required label='Username' placeholder='Enter username' fullWidth className='mt-10'/>
-            <TextField required label='Password' placeholder='Enter password' type='password' fullWidth className='mt-10'/>
+            {err ? <Typography variant="caption" className='text-red-500 font-bold'>test ku hello hahaha watafak</Typography> : null}
+            <TextField error={err} value={name} onChange={(e)=>setName(e.target.value)} required label='Username' placeholder='Enter username' fullWidth className='mt-5'/>
+            <TextField error={err} value={password} onChange={e => setPassword(e.target.value)} required label='Password' placeholder='Enter password' type='password' fullWidth className='mt-5'/>
             <FormControlLabel control={<Checkbox defaultChecked />} label={<Typography className='text-sm align-bottom'>Remember me</Typography>}/>
             <Button onClick={submit} type='submit' fullWidth className='bg-blue-50'>Sign in</Button>
             <Typography className='pt-5'>
