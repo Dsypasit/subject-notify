@@ -49,6 +49,7 @@ func (h userHandler) CreateAccount(c *fiber.Ctx) error {
 		log.Println(err)
 		return fiber.ErrExpectationFailed
 	}
+	log.Printf("%#v", user)
 	userResponse, err := h.userSrv.CreateAccount(user)
 	if err != nil {
 		return err

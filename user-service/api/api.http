@@ -1,10 +1,19 @@
-POST http://localhost:5000/Login
+POST http://localhost:8000/OpenAccount
 content-type: application/json
 
 {
-    "username": "ong",
+    "username": "ggg",
     "password":"1234"
 }
 
 ###
-GET http://localhost:5000/Hello
+GET http://localhost:8000/Hello
+
+###
+POST http://localhost:8000/Login
+content-type: application/json
+
+{
+    "username": "gg",
+    "password":"1234"
+}

@@ -13,8 +13,7 @@ const Login = () =>{
     const nevigate = useNavigate()
     const submit = async () =>{
         console.log('before');
-        err = await auth.login(name, password)
-        nevigate('/present')
+        err = await auth.login(name, password, nevigate)
     }
     return (
         <Grid className='py-20 h-100v'>
@@ -34,7 +33,7 @@ const Login = () =>{
                 </Link>
             </Typography>
             <Typography align='' className='text-sm pt-1'>Do you have an account? 
-                <Link href='#' className='text-sm no-underline'>
+                <Link href='/signup' className='text-sm no-underline'>
                     &nbsp;Sign up
                 </Link>
             </Typography>

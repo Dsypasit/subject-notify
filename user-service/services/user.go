@@ -8,8 +8,8 @@ import (
 )
 
 type NewUser struct {
-	Username string `gorm:"unique"`
-	Password string
+	Username string `gorm:"unique" json:"username"`
+	Password string `json:"password"`
 	Email    string
 	LineID   string
 }

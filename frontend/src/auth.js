@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie'
+import axios from 'axios';
 
 class Auth {
   constructor() {
@@ -27,16 +28,50 @@ class Auth {
     return token
   }
 
-  async login(name, password, func) {
-    const res = await axios.post('http://localhost:8000/login', {
-        name,
-        password
-    })
+  async signup(name, password, navigate) {
+    let res;
+    let data = {
+          username:name,
+          password:password
+      }
+    try{
+      res = await axios({
+        url:'http://localhost:5000/OpenAccount',
+        method:'post',
+        data:data,
+        headers: {'Content-Type': 'application/json'}
+      })
+    }catch(err){
+      console.log(err);
+      return res?.data ? res.data : "server error"
+    }
+    console.log(res.status);
+    if (res.status === 200){
+        navigate("/")
+    }else if(res.status == 417){
+        return "server error"
+    }else{
+      return res.data
+    }
+  }
+
+  async login(username, password, navigate) {
+    let res;
+    try{
+      res = await axios.post('http://localhost:5000/Login', {
+          username,
+          password
+      })
+    }catch(err){
+      return res?.data ? res.data : "server error"
+    }
     if (res.status <300){
         this.authenticated = true;
-        func()
+        navigate("/present")
+    }else if(res.status == 417){
+        return "server error"
     }else{
-        return res.data.message
+      return res.data
     }
   }
 

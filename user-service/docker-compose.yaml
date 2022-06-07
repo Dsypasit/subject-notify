@@ -14,16 +14,16 @@ services:
     networks:
       - db
   
-  # user_app:
-  #   build: .
-  #   ports:
-  #     - 5000:5000
-  #   depends_on:
-  #     database:
-  #       condition: service_healthy
-  #   networks:
-  #     - kong
-  #     - db
+  user_app:
+    build: .
+    ports:
+      - 5000:5000
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - kong
+      - db
     
 
 networks:

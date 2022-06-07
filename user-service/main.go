@@ -27,7 +27,7 @@ func main() {
 }
 
 func initialDatabase() *gorm.DB {
-	dsn := "root:1234@tcp(localhost:4306)/users"
+	dsn := "root:1234@tcp(database:3306)/users"
 	dial := mysql.Open(dsn)
 	db, err := gorm.Open(dial, &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
