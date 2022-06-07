@@ -49,6 +49,9 @@ services:
       - "8001:8001"
       - "8443:8443"
       - "8444:8444"
+    networks:
+      - default
+      - frontend
 
   konga-prepare:
     image: pantsel/konga:latest
@@ -74,6 +77,9 @@ services:
 networks:
   default:
     name: kong_net
+    external: true
+  frontend:
+    name : frontend
     external: true
 
 volumes:
