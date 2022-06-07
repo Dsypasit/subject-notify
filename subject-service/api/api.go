@@ -94,3 +94,9 @@ func (h subjectHandler) GetSubjectsByQuery(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(subjects)
 }
+
+func (h subjectHandler) Hello(c *fiber.Ctx) error {
+	return c.Status(200).JSON(fiber.Map{
+		"Message": "hello from subject",
+	})
+}

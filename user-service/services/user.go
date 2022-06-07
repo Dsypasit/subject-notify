@@ -3,6 +3,8 @@ package services
 import (
 	"user-service/errs"
 	"user-service/repositories"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type NewUser struct {
@@ -23,6 +25,11 @@ type UpdateUserPassword struct {
 	Password string
 }
 
+type LoginUser struct {
+	Username string
+	Password string
+}
+
 type UserResponse struct {
 	Username string
 	Email    string
@@ -35,6 +42,7 @@ type UserService interface {
 	DeleteAccount(username string) error
 	UpdateInformation(UpdateUserInfo) error
 	UpdatePassword(UpdateUserPassword) error
+	Login(LoginUser) error
 }
 
 type userService struct {
@@ -59,9 +67,15 @@ func (s userService) CreateAccount(user NewUser) (*UserResponse, error) {
 			return nil, errs.DuplicateUsername
 		}
 	}
+
+	Password, err := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+	if err != nil {
+		return nil, errs.ServerError
+	}
+
 	newAccount := repositories.User{
 		Username: user.Username,
-		Password: user.Password,
+		Password: string(Password),
 		Email:    user.Email,
 		LineID:   user.LineID,
 	}
@@ -130,6 +144,20 @@ func (s userService) UpdatePassword(userUpdate UpdateUserPassword) error {
 	err := s.userRepo.UpdatePassword(userUpdateRepo)
 	if err != nil {
 		return errs.ServerError
+	}
+	return nil
+}
+
+func (s userService) Login(user LoginUser) error {
+	if user.Username == "" || user.Password == "" {
+		return errs.InvalidRequest
+	}
+	userData, err := s.userRepo.GetUserByUsername(user.Username)
+	if err != nil {
+		return errs.UserNotFound
+	}
+	if err = bcrypt.CompareHashAndPassword([]byte(userData.Password), []byte(user.Password)); err != nil {
+		return errs.PasswordInvalid
 	}
 	return nil
 }

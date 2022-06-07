@@ -9,4 +9,5 @@ func Route(app *fiber.App, handler subjectHandler) {
 	api.Post("/update", handler.UpdateSubject)
 	api.Get("/get", handler.GetSubjectsByQuery)
 	api.Get("/get/:username", handler.GetSubjectsByUsername)
+	app.Get("/Hello", handler.Hello)
 }

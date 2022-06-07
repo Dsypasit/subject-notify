@@ -15,6 +15,7 @@ type UserHandler interface {
 	UpdatePassword(c *fiber.Ctx) error
 	DeleteAccount(c *fiber.Ctx) error
 	Hello(c *fiber.Ctx) error
+	Login(c *fiber.Ctx) error
 }
 
 type userHandler struct {
@@ -92,6 +93,20 @@ func (h userHandler) DeleteAccount(c *fiber.Ctx) error {
 func (h userHandler) Hello(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "Hello world",
+		"status":  "ok",
+	})
+}
+
+func (h userHandler) Login(c *fiber.Ctx) error {
+	login := services.LoginUser{}
+	if err := c.BodyParser(&login); err != nil {
+		return fiber.ErrExpectationFailed
+	}
+	if err := h.userSrv.Login(login); err != nil {
+		return err
+	}
+	return c.JSON(fiber.Map{
+		"message": "login success",
 		"status":  "ok",
 	})
 }
