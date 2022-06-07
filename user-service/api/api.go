@@ -3,8 +3,11 @@ package api
 import (
 	"fmt"
 	"log"
+	"strings"
+	"time"
 	"user-service/services"
 
+	"github.com/dgrijalva/jwt-go/v4"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -21,6 +24,8 @@ type UserHandler interface {
 type userHandler struct {
 	userSrv services.UserService
 }
+
+const secreate = "kmutnb"
 
 func NewUserHandler(userSrv services.UserService) UserHandler {
 	return userHandler{userSrv}
@@ -105,6 +110,33 @@ func (h userHandler) Login(c *fiber.Ctx) error {
 	if err := h.userSrv.Login(login); err != nil {
 		return err
 	}
+
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+		Issuer:    "user",
+		ExpiresAt: jwt.At(time.Now().Add(time.Hour * 24)),
+	})
+
+	token, err := claims.SignedString([]byte(secreate))
+	if err != nil {
+		return fiber.ErrExpectationFailed
+	}
+
+	split_token := strings.Split(token, ".")
+
+	cookie_j := new(fiber.Cookie)
+	cookie_j.Name = "j"
+	cookie_j.Value = split_token[0] + "." + split_token[1]
+	cookie_j.Secure = true
+	cookie_j.HTTPOnly = true
+	c.Cookie(cookie_j)
+
+	cookie_a := new(fiber.Cookie)
+	cookie_a.Name = "a"
+	cookie_a.Value = split_token[2]
+	cookie_a.Secure = true
+	cookie_a.HTTPOnly = true
+	c.Cookie(cookie_a)
+
 	return c.JSON(fiber.Map{
 		"message": "login success",
 		"status":  "ok",

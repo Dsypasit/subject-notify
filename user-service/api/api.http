@@ -1,0 +1,10 @@
+POST http://localhost:5000/Login
+content-type: application/json
+
+{
+    "username": "ong",
+    "password":"1234"
+}
+
+###
+GET http://localhost:5000/Hello
