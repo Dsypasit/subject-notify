@@ -8,6 +8,8 @@ content-type: application/json
 
 ###
 GET http://localhost:5000/Hello
+Set-Cookie:  j=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NTUxODg3MzQuMzczOTk4MiwiaXNzIjoiZ2dnIn0; HttpOnly; secure; SameSite=Lax
+Set-Cookie: a=nG87AUYdNTyYrS_i0QpLO6fXFIIM32CvwHlIc9wxH2U; HttpOnly; secure; SameSite=Lax
 
 ###
 POST http://localhost:5000/Login

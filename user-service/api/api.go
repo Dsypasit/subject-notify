@@ -33,11 +33,11 @@ func NewUserHandler(userSrv services.UserService) UserHandler {
 }
 
 func (h userHandler) GetAccount(c *fiber.Ctx) error {
-	username := Username{}
-	if err := c.BodyParser(&username); err != nil {
-		return fiber.ErrExpectationFailed
+	username := c.GetRespHeader("username")
+	if username == "" {
+		return fiber.ErrBadRequest
 	}
-	user, err := h.userSrv.GetUser(username.Username)
+	user, err := h.userSrv.GetUser(username)
 	if err != nil {
 		return err
 	}
@@ -85,15 +85,15 @@ func (h userHandler) UpdatePassword(c *fiber.Ctx) error {
 }
 
 func (h userHandler) DeleteAccount(c *fiber.Ctx) error {
-	username := Username{}
-	if err := c.BodyParser(&username); err != nil {
-		return fiber.ErrExpectationFailed
+	username := c.GetRespHeader("username")
+	if username == "" {
+		return fiber.ErrBadRequest
 	}
-	if err := h.userSrv.DeleteAccount(username.Username); err != nil {
+	if err := h.userSrv.DeleteAccount(username); err != nil {
 		return err
 	}
 	return c.JSON(fiber.Map{
-		"message": fmt.Sprintf("Account %v has been deleted", username.Username),
+		"message": fmt.Sprintf("Account %v has been deleted", username),
 	})
 }
 
@@ -114,7 +114,7 @@ func (h userHandler) Login(c *fiber.Ctx) error {
 	}
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
-		Issuer:    "user",
+		Issuer:    login.Username,
 		ExpiresAt: jwt.At(time.Now().Add(time.Hour * 24)),
 	})
 
@@ -128,14 +128,12 @@ func (h userHandler) Login(c *fiber.Ctx) error {
 	cookie_j := new(fiber.Cookie)
 	cookie_j.Name = "j"
 	cookie_j.Value = split_token[0] + "." + split_token[1]
-	cookie_j.Secure = true
 	cookie_j.HTTPOnly = true
 	c.Cookie(cookie_j)
 
 	cookie_a := new(fiber.Cookie)
 	cookie_a.Name = "a"
 	cookie_a.Value = split_token[2]
-	cookie_a.Secure = true
 	cookie_a.HTTPOnly = true
 	c.Cookie(cookie_a)
 
