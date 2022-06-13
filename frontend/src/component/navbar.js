@@ -8,9 +8,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
-export default function MenuAppBar({auth}) {
+export default function MenuAppBar({ auth }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const nevigate = useNavigate()
 
 
   const handleMenu = (event) => {
@@ -20,6 +23,11 @@ export default function MenuAppBar({auth}) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleLogout = () =>{
+    auth.logout(nevigate)
+    setAnchorEl(null);
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -37,7 +45,7 @@ export default function MenuAppBar({auth}) {
           <Typography variant="h6" component="div" className='grow'>
             Photos
           </Typography>
-          {auth && (
+          {auth.isAuthenticated && (
             <div>
               <IconButton
                 size="large"
@@ -66,6 +74,7 @@ export default function MenuAppBar({auth}) {
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
           )}

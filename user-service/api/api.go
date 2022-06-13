@@ -19,6 +19,7 @@ type UserHandler interface {
 	DeleteAccount(c *fiber.Ctx) error
 	Hello(c *fiber.Ctx) error
 	Login(c *fiber.Ctx) error
+	Logout(c *fiber.Ctx) error
 }
 
 type userHandler struct {
@@ -142,4 +143,10 @@ func (h userHandler) Login(c *fiber.Ctx) error {
 		"message": "login success",
 		"status":  "ok",
 	})
+}
+
+func (h userHandler) Logout(c *fiber.Ctx) error {
+	c.ClearCookie("j")
+	c.ClearCookie("a")
+	return c.SendStatus(200)
 }

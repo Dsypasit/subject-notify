@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Avatar, Button, Grid, Link, Paper, TextField, Typography } from '@mui/material'
 import PersonIcon from '@mui/icons-material/Person';
 import { FormControlLabel, Checkbox } from '@mui/material';
@@ -15,6 +15,14 @@ const Login = () =>{
         console.log('before');
         err = await auth.login(name, password, nevigate)
     }
+
+    useEffect(()=>{
+        auth.checkCookies()
+        if (auth.isAuthenticated()){
+            nevigate('/')
+        }
+    }, [])
+    
     return (
         <Grid className='py-20 h-100v'>
         <Paper elevation={10} className='p-20 w-72 mx-auto my-10'>

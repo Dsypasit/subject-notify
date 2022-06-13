@@ -13,7 +13,8 @@ class Auth {
     this.t1 = Cookies.get('j')
     this.t2 = Cookies.get('a')
     if (this.t1 == undefined || this.t2 == undefined){
-    return
+      this.authenticated = false
+      return
     }
     this.authenticated = true
   }
@@ -36,7 +37,8 @@ class Auth {
       }
     try{
       res = await axios({
-        url:'http://localhost:5000/OpenAccount',
+        url:'/OpenAccount',
+        baseURL:'http://127.0.0.1:5000',
         method:'post',
         data:data,
         headers: {'Content-Type': 'application/json'}
@@ -58,16 +60,21 @@ class Auth {
   async login(username, password, navigate) {
     let res;
     try{
-      res = await axios.post('http://localhost:5000/Login', {
-          username,
-          password
-      })
+      res = await fetch('http://localhost:5000/Login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include',
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
     }catch(err){
       return res?.data ? res.data : "server error"
     }
     if (res.status <300){
         this.authenticated = true;
-        navigate("/present")
+        navigate("/")
     }else if(res.status == 417){
         return "server error"
     }else{
@@ -75,9 +82,13 @@ class Auth {
     }
   }
 
-  logout(cb) {
+  logout(nevigate) {
     this.authenticated = false;
-    cb();
+    fetch('http://localhost:5000/Logout', {
+      method: 'GET',
+      credentials: 'include'
+    }).then(() => nevigate('/login'))
+    .catch((err)=> console.log(err))
   }
 
   isAuthenticated() {

@@ -22,12 +22,14 @@ func main() {
 	app.Use(cors.New(cors.Config{
 		AllowHeaders:     "Origin, Content-Type, Accept",
 		AllowCredentials: true,
+		AllowOrigins:     "http://localhost:3000",
 	}))
 	api.Route(app, userHandler)
 	app.Listen(":5000")
 }
 
 func initialDatabase() *gorm.DB {
+	// dsn := "root:1234@tcp(localhost:4306)/users"
 	dsn := "root:1234@tcp(database:3306)/users"
 	dial := mysql.Open(dsn)
 	db, err := gorm.Open(dial, &gorm.Config{

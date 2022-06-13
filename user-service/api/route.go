@@ -11,5 +11,6 @@ func Route(app *fiber.App, handler UserHandler) {
 	app.Post("/UpdateAccountPassword", handler.UpdatePassword)
 	app.Post("/DeleteAccount", handler.DeleteAccount)
 	app.Post("/Login", handler.Login)
+	app.Get("/Logout", handler.Logout)
 	app.Get("/Hello", handler.Hello)
 }
