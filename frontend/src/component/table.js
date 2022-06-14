@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Command from './command';
 
 const createData = (day, morningSubject, afternoonSubject) =>{
     return {day, morningSubject, afternoonSubject}
@@ -49,6 +50,7 @@ export default function TableSubject(){
       </Table>
     </TableContainer>
             </div>
+            <Command/>
         </div>
     )
 }

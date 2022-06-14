@@ -10,8 +10,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import auth from '../auth';
 
-export default function MenuAppBar({ auth }) {
+export default function MenuAppBar({ info, setInfo, setPass }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const nevigate = useNavigate()
 
@@ -25,7 +26,10 @@ export default function MenuAppBar({ auth }) {
   };
 
   const handleLogout = () =>{
-    auth.logout(nevigate)
+    auth.logout()
+    setPass(false)
+    nevigate('/login')
+    setInfo(undefined)
     setAnchorEl(null);
   }
 
@@ -45,7 +49,7 @@ export default function MenuAppBar({ auth }) {
           <Typography variant="h6" component="div" className='grow'>
             Photos
           </Typography>
-          {auth.isAuthenticated && (
+          {info  && (
             <div>
               <IconButton
                 size="large"

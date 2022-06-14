@@ -12,7 +12,7 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import { AccountCircle } from '@mui/icons-material';
 import { Avatar } from '@mui/material';
 
-export default function BasicList() {
+export default function BasicList({info}) {
   return (
     <Box className='my-5 px-5 drop-shadow-sm'>
         <List>
@@ -22,7 +22,7 @@ export default function BasicList() {
                 <AccountCircle />
                   </Avatar>
               </ListItemAvatar>
-              <ListItemText primary="Pasit Sri-intarasut" />
+              <ListItemText primary={info.Username} />
           </ListItem>
       <Divider />
           <ListItem disablePadding>

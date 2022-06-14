@@ -29,8 +29,9 @@ class Auth {
     return token
   }
 
-  async signup(name, password, navigate) {
+  async signup(name, password) {
     let res;
+    let text
     let data = {
           username:name,
           password:password
@@ -44,21 +45,14 @@ class Auth {
         headers: {'Content-Type': 'application/json'}
       })
     }catch(err){
-      console.log(err);
-      return res?.data ? res.data : "server error"
+      return "server error"
     }
-    console.log(res.status);
-    if (res.status === 200){
-        navigate("/")
-    }else if(res.status == 417){
-        return "server error"
-    }else{
-      return res.data
-    }
+    return undefined
   }
 
-  async login(username, password, navigate) {
+  async login(username, password) {
     let res;
+    let text;
     try{
       res = await fetch('http://localhost:5000/Login', {
             method: 'POST',
@@ -69,30 +63,47 @@ class Auth {
                 password
             })
         });
+      let data = await res.text()
+      console.log(data+"login1");
     }catch(err){
-      return res?.data ? res.data : "server error"
+      let data = await res.text()
+      console.log(data+"login2");
+      return data
     }
-    if (res.status <300){
-        this.authenticated = true;
-        navigate("/")
-    }else if(res.status == 417){
-        return "server error"
-    }else{
-      return res.data
-    }
+    
+    return text
   }
 
-  logout(nevigate) {
+  logout() {
     this.authenticated = false;
     fetch('http://localhost:5000/Logout', {
       method: 'GET',
       credentials: 'include'
-    }).then(() => nevigate('/login'))
+    })
     .catch((err)=> console.log(err))
   }
 
   isAuthenticated() {
     return this.authenticated;
+  }
+
+  getUser(setInfo){
+    let success = false
+    fetch('http://localhost:5000/GetAccount', {
+      method: 'GET',
+      credentials: 'include'
+    }).then((res) => {
+      return res.json()
+    })
+    .then((data) => {
+      setInfo(data)
+      console.log(data);
+      success = true
+    })
+    .catch((err)=> {
+      throw err
+    })
+    return success;
   }
 }
 

@@ -15,19 +15,21 @@ const Signup = () =>{
     const [errPass, setErrPass] = useState(false)
     const [errName, setErrName] = useState(false)
 
-    const submit = async() =>{
+    const submit = async(e) =>{
+        e.preventDefault()
         if (name === "" || password ===""){
             setErrName(true)
             setErrPass(true)
             setErrMessage("Please Enter username and password")
             return
         }
-        let err = await auth.signup(name, password, nevigate)
+        let err = await auth.signup(name, password)
         if (err != undefined){
             setErrName(true)
             setErrMessage(err)
             return
         }
+        nevigate("/login")
     }
     useEffect(() => {
         if (confirmPass !== password){

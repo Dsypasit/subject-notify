@@ -1,10 +1,17 @@
 import BasicList from "./component/listItem"
 import TableSubject from "./component/table"
-export default function Present () {
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom"
+import auth from "./auth"
+
+export default function Present ({info, setInfo, setPass}) {
+
     return (
+        <div>
         <div className="flex">
-            <BasicList/>
-            <TableSubject/>
+            <BasicList info={info}/>
+            <TableSubject info={info}/>
+        </div>
         </div>
     )
 }

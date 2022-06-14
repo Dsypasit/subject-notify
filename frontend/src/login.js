@@ -6,23 +6,20 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import auth from './auth';
 
-const Login = () =>{
+const Login = ({info, setPass, setInfo}) =>{
     let err = ""
     const [name, setName] = useState("")
     const [password, setPassword] = useState("")
     const nevigate = useNavigate()
-    const submit = async () =>{
-        console.log('before');
-        err = await auth.login(name, password, nevigate)
+    const submit = async (e) =>{
+        e.preventDefault()
+        await auth.login(name, password)
+        await auth.getUser(setInfo)
+        if (info){
+            nevigate("/")
+        }
     }
 
-    useEffect(()=>{
-        auth.checkCookies()
-        if (auth.isAuthenticated()){
-            nevigate('/')
-        }
-    }, [])
-    
     return (
         <Grid className='py-20 h-100v'>
         <Paper elevation={10} className='p-20 w-72 mx-auto my-10'>
